@@ -18,6 +18,7 @@ public class FileStore {
     private String fileDir;
 
     public String getFullPath(String filename) {
+        new File(fileDir).mkdir();
         return fileDir + filename;
     }
 
@@ -31,10 +32,13 @@ public class FileStore {
         return storeFileResult;
     }
 
+
+
     public UploadFile storeFile(MultipartFile multipartFile) throws IOException {
         if (multipartFile.isEmpty()) {
             return null;
         }
+
 
         String originalFilename = multipartFile.getOriginalFilename();
         String storeFileName = createStoreFileName(originalFilename);

@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.util.UriUtils;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
@@ -32,23 +33,25 @@ public class ItemController {
     private final FileStore fileStore;
 
     @GetMapping("/items/new")
-    public String newItem(@ModelAttribute ItemForm form) {
-        return "item-form";
-    }
+        public String newItem(@ModelAttribute ItemForm form) {
+            return "item-form";
+        }
 
-    @PostMapping("/items/new")
-    public String saveItem(@ModelAttribute ItemForm form, RedirectAttributes redirectAttributes) throws IOException {
-        UploadFile attachFile = fileStore.storeFile(form.getAttachFile());
-        List<UploadFile> storeImageFiles = fileStore.storeFiles(form.getImageFiles());
+        @PostMapping("/items/new")
+        public String saveItem(@ModelAttribute ItemForm form, RedirectAttributes redirectAttributes) throws IOException {
+            UploadFile attachFile = fileStore.storeFile(form.getAttachFile());
+            List<UploadFile> storeImageFiles = fileStore.storeFiles(form.getImageFiles());
 
-        //데이터베이스에 저장
-        Item item = new Item();
-        item.setItemName(form.getItemName());
-        item.setAttachFile(attachFile);
-        item.setImageFiles(storeImageFiles);
-        itemRepository.save(item);
 
-        redirectAttributes.addAttribute("itemId", item.getId());
+
+            //데이터베이스에 저장
+            Item item = new Item();
+            item.setItemName(form.getItemName());
+            item.setAttachFile(attachFile);
+            item.setImageFiles(storeImageFiles);
+            itemRepository.save(item);
+
+            redirectAttributes.addAttribute("itemId", item.getId());
 
         return "redirect:/items/{itemId}";
     }
