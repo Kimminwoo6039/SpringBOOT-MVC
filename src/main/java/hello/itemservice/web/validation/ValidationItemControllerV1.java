@@ -21,6 +21,7 @@ public class ValidationItemControllerV1 {
     public String items(Model model) {
         List<Item> items = itemRepository.findAll();
         model.addAttribute("items", items);
+//        return "validation/v1/items";
         return "validation/v1/items";
     }
 
